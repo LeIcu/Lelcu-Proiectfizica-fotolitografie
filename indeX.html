@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fotolitografie & Radiații X</title>
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #12121a;
+      --surface2:  #1a1a2e;
+      --accent:    #6c63ff;
+      --accent2:   #00d4ff;
+      --accent3:   #ff6b6b;
+      --text:      #e0e0f0;
+      --text-muted:#8888aa;
+      --border:    #2a2a3e;
+      --card:      #16161f;
+      --glow:      rgba(108,99,255,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent2); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    
+      background: linear-gradient(180deg, rgba(10,10,15,0.78) 0%, rgba(10,10,15,0.92) 60%, rgba(10,10,15,0.98) 100%), url('bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(108,99,255,0.15);
+      border: 1px solid rgba(108,99,255,0.4);
+      color: var(--accent2);
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      max-width: 600px;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--glow);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── SLIDESHOW SECTION ─── */
+    .slideshow-section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      color: var(--accent2);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ─── SLIDE CONTAINER ─── */
+    .slideshow-wrapper {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    /* ─── FULLSCREEN MODE ─── */
+.slideshow-wrapper:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: var(--bg);
+}
+.slideshow-wrapper:fullscreen .slides-container {
+  min-height: 100vh;
+}
+.slideshow-wrapper:fullscreen .slide {
+  padding: clamp(1.25rem, 3vw, 2.75rem);
+}
+.slideshow-wrapper:fullscreen .slideshow-header {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  background: rgba(6, 8, 14, 0.75);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 5;
+}
+
+    .slides-container {
+      position: relative;
+      min-height: 520px;
+    }
+
+    .slide {
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    .slide.active { display: flex; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide-inner {
+      display: flex;
+      width: 100%;
+      min-height: 520px;
+    }
+
+    /* Left: image panel */
+    .slide-image-panel {
+      width: 45%;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--surface2);
+    }
+
+    .slide-image-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .slide:hover .slide-image-panel img {
+      transform: scale(1.04);
+    }
+
+    .slide-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .placeholder-icon {
+      font-size: 3rem;
+      opacity: 0.4;
+    }
+
+    .slide-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 70%, var(--card));
+      pointer-events: none;
+    }
+
+    /* Right: content panel */
+    .slide-content-panel {
+      flex: 1;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide-number {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .slide-category {
+      display: inline-block;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--accent2);
+      padding: 0.2rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .slide-title {
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .slide-title .highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .slide-body {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .slide-facts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .fact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .fact-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+      margin-top: 0.45rem;
+    }
+
+    .formula-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: var(--accent2);
+    }
+
+    /* ─── SLIDE CONTROLS ─── */
+    .slide-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .slide-dots {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    .slide-nav {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .nav-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .slide-progress {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-bar-wrap {
+      height: 3px;
+      background: var(--border);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.4s ease;
+    }
+
+    /* ─── INFO CARDS SECTION ─── */
+    .cards-section {
+      padding: 4rem 2rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto 0;
+    }
+
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 40px var(--glow);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── TIMELINE SECTION ─── */
+    .timeline-section {
+      padding: 5rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2.5rem;
+      padding-left: 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.4rem;
+      top: 0.4rem;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 10px var(--glow);
+    }
+
+    .timeline-year {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── ADMIN OVERLAY ─── */
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">⚗️ FotoLitografie & Radiații X</div>
+  <ul class="nav-links">
+    <li><a href="#slideshow">Prezentare</a></li>
+    <li><a href="#cards">Concepte</a></li>
+    <li><a href="#timeline">Cronologie</a></li>
+</ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+<h1>
+    <span>Fotolitografie</span><br>
+    &amp; Radiații X
+  </h1>
+  <p>
+    Descoperă cum tehnologia EUV și razele X au revoluționat
+    fabricarea microchipurilor și medicina modernă.
+    De la transistori la 13 nm de lumină extremă.
+  </p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="scrollToSlides()">▶ Începe Prezentarea</button>
+</div>
+</section>
+
+<!-- ─── STATS ─── -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value">13 nm</div>
+    <div class="stat-label">Lungime de undă EUV</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">50K/s</div>
+    <div class="stat-label">Picături de Sn / secundă</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">220K K</div>
+    <div class="stat-label">Temperatura plasmei</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">$400M</div>
+    <div class="stat-label">Cost mașină EUV high-NA</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">5 atomi</div>
+    <div class="stat-label">Precizie suprapunere straturi</div>
+  </div>
+</div>
+
+<!-- ─── SLIDESHOW ─── -->
+<section class="slideshow-section" id="slideshow">
+  <div class="section-header">
+    <div class="section-tag">✦ Slideshow Interactiv</div>
+    <h2>Explorează Tehnologia</h2>
+    <p>Navigează prin conceptele cheie ale fotolitografiei și radiațiilor X</p>
+  </div>
+
+    <div class="slides-container" id="slidesContainer">
+      <!-- Slides injected by JS -->
+    </div>
+
+    <div class="slide-controls">
+      <div class="slide-dots" id="slideDots"></div>
+      <div class="slide-progress" id="slideProgress">1 / 7</div>
+      <div class="slide-nav">
+        <button class="nav-btn" onclick="changeSlide(-1)">←</button>
+        <button class="nav-btn" onclick="changeSlide(1)">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INFO CARDS ─── -->
+<section class="cards-section" id="cards">
+  <div class="section-header">
+    <div class="section-tag">✦ Concepte Cheie</div>
+    <h2>Fundamente Știițifice</h2>
+    <p>Principiile fizice care stau la baza tehnologiei</p>
+  </div>
+  <div class="cards-grid"></div>
+</section>
+
+<!-- ─── TIMELINE ─── -->
+<section class="timeline-section" id="timeline">
+  <div class="section-header" style="text-align:left;margin-bottom:2.5rem">
+    <div class="section-tag">✦ Cronologie</div>
+    <h2>Istoria EUV &amp; Radiații X</h2>
+  </div>
+  <div class="timeline" id="timelineEl">
+    <!-- injected by JS -->
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p style="text-align: center;">Realizat de Lelcu Gabriel, cnprsv</p>
+</footer>
+
+<script>
+/* ===========================
+   DATE
+=========================== */
+const slides = [
+  {
+    "category": "Microelectronică",
+    "title": "Tranzistori și Legea lui Moore",
+    "body": "Tranzistorul este „întrerupătorul” microscopic care face posibilă logica digitală. Cu cât putem pune mai mulți tranzistori pe același cip, cu atât cresc performanța și eficiența energetică.",
+    "facts": [
+      "Un cip modern are miliarde de tranzistori.",
+      "Scăderea dimensiunilor cere precizie la nivel de nanometri.",
+      "Litografia este procesul-cheie care permite miniaturizarea."
+    ],
+    "image": "slide1.jpg"
+  },
+  {
+    "category": "Fizică & Istorie",
+    "title": "Raze X — Descoperirea care a schimbat lumea",
+    "body": "Razele X au demonstrat că putem „vedea” structuri invizibile cu lumină de alt tip. Ideea că radiația poate revela detalii fine a influențat atât medicina, cât și fizica materialelor.",
+    "facts": [
+      "Raze X = radiație electromagnetică cu energie mare.",
+      "Pătrund prin materiale, dar sunt absorbite diferit de țesuturi/structuri.",
+      "Au accelerat cercetarea în materiale și microstructuri."
+    ],
+    "image": "slide2.jpeg"
+  },
+  {
+    "category": "Microfabricatie",
+    "title": "Fotolitografia pe scurt",
+    "body": "Fotolitografia transferă un desen (pattern) de pe o mască pe un wafer cu ajutorul luminii și al unui strat fotosensibil (photoresist). Apoi urmează etching/depunere pentru a construi straturi repetate.",
+    "facts": [
+      "Masca → lumină → photoresist → develop → etching.",
+      "Proces repetat de zeci/sute de ori pentru un cip.",
+      "Acuratețea alinierii straturilor este critică."
+    ],
+    "image": "slide3.png"
+  },
+  {
+    "category": "Optică",
+    "title": "Difracție și Limitele Fizice",
+    "body": "Când dimensiunile devin foarte mici, lumina se comportă ca o undă și „se împrăștie” (difracție). Asta pune o limită naturală asupra cât de fine pot fi detaliile imprimate la o anumită lungime de undă.",
+    "facts": [
+      "Mai mică lungime de undă → detalii mai fine.",
+      "DUV (193 nm) a ajuns aproape de limită.",
+      "EUV (13.5 nm) a fost pasul următor."
+    ],
+    "image": "slide4.jpeg"
+  },
+  {
+    "category": "EUV",
+    "title": "Originile EUV — Kinoshita și vizionarii",
+    "body": "În anii ’80–’90, cercetători precum Hiroo Kinoshita au împins ideea de litografie cu lungimi de undă extrem de mici (EUV). Drumul a fost lung: surse de lumină, oglinzi, vacuum, metrologie.",
+    "facts": [
+      "EUV nu trece prin aer → e nevoie de vacuum.",
+      "Nu poți folosi lentile obișnuite → doar oglinzi speciale.",
+      "A fost nevoie de decenii de R&D ca să devină industrial."
+    ],
+    "image": "slide5.jpeg"
+  },
+  {
+    "category": "Precizie extremă",
+    "title": "Oglinzile Zeiss — cele mai netede obiecte din univers",
+    "body": "În EUV, fiecare reflexie contează. Oglinzile sunt multilayer și trebuie fabricate cu o netezime incredibilă, altfel imaginea se degradează și detaliile se pierd.",
+    "facts": [
+      "Oglinzi multilayer reflectă EUV eficient.",
+      "Abaterile microscopice reduc contrastul.",
+      "Zeiss este lider în optica EUV."
+    ],
+    "image": "slide6.jpeg"
+  },
+  {
+    "category": "Industrie",
+    "title": "ASML — Singura companie din lume",
+    "body": "ASML a reușit să integreze toate piesele imposibile: sursa EUV, optica Zeiss, camere de vacuum, control vibrații, metrologie și software. Rezultatul: mașinile EUV care produc cele mai avansate cipuri.",
+    "facts": [
+      "Sistem extrem de complex: mii de subansamble.",
+      "Necesită colaborări globale (Zeiss, furnizori, institute).",
+      "EUV = avantaj strategic în semiconductori."
+    ],
+    "image": "slide7.jpg"
+  },
+  {
+    "category": "Impact",
+    "title": "De ce contează pentru lumea modernă",
+    "body": "Fără litografie avansată nu am avea smartphone-uri rapide, AI accesibil, centre de date eficiente sau progrese în medicină și industrie. EUV susține „motorul” economiei digitale.",
+    "facts": [
+      "Telefoane, laptopuri, mașini, echipamente medicale.",
+      "AI și cloud depind de procesoare eficiente.",
+      "Lanțul de semiconductori este infrastructură critică."
+    ],
+    "image": "slide8.jpg"
+  },
+  {
+    "category": "Încheiere",
+    "title": "Concluzie",
+    "body": "Povestea de la raze X la EUV arată cum fizica, ingineria și industria se combină pentru a împinge limitele. Miniaturizarea continuă depinde de controlul luminii la scară nanometrică.",
+    "facts": [
+      "Mai mic = mai greu (vibrații, particule, erori).",
+      "EUV a fost „saltul” major al ultimelor decenii.",
+      "Următorul pas: High-NA, noi materiale și noi procese."
+    ],
+    "image": "slide9.jpg"
+  }
+];
+
+const timelineEvents = [
+  {
+    "year": "1895",
+    "title": "Descoperirea razelor X",
+    "desc": "Wilhelm Röntgen descoperă razele X — începe era imagisticii moderne și a investigațiilor de structură."
+  },
+  {
+    "year": "1959",
+    "title": "Viziunea miniaturizării",
+    "desc": "Feynman popularizează ideea manipulării la scară foarte mică — inspirație pentru micro/nano-tehnologii."
+  },
+  {
+    "year": "1965",
+    "title": "Legea lui Moore",
+    "desc": "Gordon Moore observă tendința de creștere a numărului de tranzistori — litografia devine esențială."
+  },
+  {
+    "year": "1980–1990",
+    "title": "Pionierii EUV",
+    "desc": "Cercetători (inclusiv Hiroo Kinoshita) dezvoltă concepte și experimente pentru litografie EUV."
+  },
+  {
+    "year": "2000–2010",
+    "title": "Optică & surse EUV",
+    "desc": "Progrese majore la oglinzi multilayer, surse pe staniu și metrologie în vacuum."
+  },
+  {
+    "year": "2018+",
+    "title": "EUV în producție",
+    "desc": "EUV devine tehnologie industrială pentru noduri avansate; ASML livrează sisteme la scară."
+  }
+];
+let currentSlide = 0;
+let autoplayTimer = null;
+const AUTOPLAY_INTERVAL_MS = 4500;
+
+const concepts = [
+  { icon: "🧱", title: "Wafer (siliciu)", desc: "Placa subțire pe care se construiesc straturile cipului." },
+  { icon: "🎭", title: "Masca", desc: "Modelul (pattern-ul) care va fi proiectat pe wafer." },
+  { icon: "🧪", title: "Photoresist", desc: "Strat fotosensibil: se modifică în funcție de lumină." },
+  { icon: "🔦", title: "DUV vs EUV", desc: "DUV (193 nm) vs EUV (13.5 nm) — lungime de undă mai mică, detalii mai fine." },
+  { icon: "🌫️", title: "Vid (vacuum)", desc: "Aerul absoarbe EUV, deci totul rulează în camere de vacuum." },
+  { icon: "🪞", title: "Oglinzi multilayer", desc: "La EUV nu folosim lentile; lumina e dirijată cu oglinzi speciale." },
+  { icon: "📏", title: "Aliniere & metrologie", desc: "Măsurători și corecții continue ca straturile să se suprapună perfect." },
+  { icon: "⚡", title: "Sursa EUV (staniu)", desc: "Laserul creează plasmă din picături de staniu, emițând lumină EUV." }
+];
+
+/* ===========================
+   SLIDES
+=========================== */
+function renderSlides() {
+  const container = document.getElementById('slidesContainer');
+  const dots = document.getElementById('slideDots');
+  const progress = document.getElementById('slideProgress');
+  const bar = document.getElementById('progressBar');
+
+  container.innerHTML = '';
+  dots.innerHTML = '';
+
+  slides.forEach((s, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'slide' + (i === currentSlide ? ' active' : '');
+    slide.innerHTML = `
+      <div class="slide-inner">
+        <div class="slide-image-panel">
+          ${s.image
+            ? `<img src="${s.image}" alt="${s.category || ''}" loading="lazy" /><div class="slide-image-overlay"></div>`
+            : `<div class="slide-image-placeholder"><div class="placeholder-icon">🖼</div><span>Imagine (opțional)</span></div>`}
+        </div>
+        <div class="slide-content-panel">
+          <div class="slide-number">Slide ${String(i+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}</div>
+          <div class="slide-category">${s.category || ''}</div>
+          <h2 class="slide-title">${s.title || ''}</h2>
+          <p class="slide-body">${s.body || ''}</p>
+          <div class="slide-facts">
+            ${(s.facts || []).map(f => `<div class="fact-item"><div class="fact-dot"></div><span>${f}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(slide);
+
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === currentSlide ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dots.appendChild(dot);
+  });
+
+  progress.textContent = `${currentSlide + 1} / ${slides.length}`;
+  if (bar) bar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+}
+
+function goToSlide(i) {
+  currentSlide = (i + slides.length) % slides.length;
+  renderSlides();
+}
+
+function changeSlide(dir) {
+  goToSlide(currentSlide + dir);
+}
+
+
+function stopAutoplay() {
+  if (autoplayTimer) clearInterval(autoplayTimer);
+  autoplayTimer = null;
+}
+
+/* ===========================
+   CONCEPTS
+=========================== */
+function renderConcepts() {
+  const grid = document.querySelector('.cards-grid');
+  if (!grid) return;
+  grid.innerHTML = concepts.map(c => `
+    <div class="info-card">
+      <div class="card-icon">${c.icon}</div>
+      <h3>${c.title}</h3>
+      <p>${c.desc}</p>
+    </div>
+  `).join('');
+}
+
+/* ===========================
+   TIMELINE
+=========================== */
+function renderTimeline() {
+  const el = document.getElementById('timelineEl');
+  if (!el) return;
+  el.innerHTML = timelineEvents.map(ev => `
+    <div class="timeline-item">
+      <div class="timeline-year">${ev.year}</div>
+      <div class="timeline-content">
+        <h3>${ev.title}</h3>
+        <p>${ev.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===========================
+   INIT
+=========================== */
+document.addEventListener('DOMContentLoaded', () => {
+  renderSlides();
+  renderConcepts();
+  renderTimeline();
+
+  // Taste: stânga/dreapta
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key === 'ArrowRight') changeSlide(1);
+    if (e.key === ' ') { e.preventDefault(); autoplayTimer ? stopAutoplay() : startAutoplay(); }
+  });
+
+  startAutoplay();
+});
+
+// ─────────────────────────────────────────────────────────────
+// HERO CTA → SLIDESHOW FULLSCREEN
+// ─────────────────────────────────────────────────────────────
+function requestFS(el) {
+  if (!el) return;
+  if (document.fullscreenElement) return;
+  const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if (fn) fn.call(el);
+}
+
+function scrollToSlides() {
+  const section = document.getElementById('slideshow');
+  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // așteaptă scroll-ul puțin, apoi intră fullscreen
+  const wrap = document.querySelector('.slideshow-wrapper');
+  setTimeout(() => requestFS(wrap), 350);
+}
+
+// Optional: double-click slideshow to toggle fullscreen
+(function bindFullscreenToggle() {
+  const wrap = document.querySelector('.slideshow-wrapper');
+  if (!wrap) return;
+  wrap.addEventListener('dblclick', () => {
+    if (document.fullscreenElement) {
+      (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen)?.call(document);
+    } else {
+      requestFS(wrap);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
